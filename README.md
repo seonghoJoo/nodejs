@@ -21,3 +21,25 @@ fs.stat(__filename, function statCb(err, stats) {
 1. mocha - 테스트 코드를 돌려주는 테스트 러너
 2. should - assert 대용
 3. SuperTest - api 테스트 
+
+## 안되는 코드
+```
+app.get('/users/:id', function(req, res){
+    const id = parseInt(req.params.id,10);
+    const user = users.filter( (user) => {
+        user.id === id
+    })[0];
+    res.json(user);
+});
+```
+
+## 작동하는 코드
+```
+app.get('/users/:id', function(req, res){
+    const id = parseInt(req.params.id,10);
+    const user = users.filter( (user) => 
+        user.id === id
+    )[0];
+    res.json(user);
+});
+```
