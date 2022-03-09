@@ -9,12 +9,13 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "mocha": "^9.2.1",
     "should": "^13.2.3",
     "supertest": "^6.2.2"
   },
   "scripts": {
-    "test": "mocha index.spec.js",
+    "test": "cross-env NODE_ENV=test mocha api/user/user.spec.js",
     "start": "node index.js"
   },
   "repository": {
