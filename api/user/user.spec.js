@@ -4,11 +4,11 @@ const request = require('superTest');
 const should = require('should');
 const models = require('../../models');
 
-describe.only('GET /users는 ', () => {
+describe('GET /users는 ', () => {
+    const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
+    before(() =>  models.sequelize.sync({force : true}));
+    before(() =>  models.User.bulkCreate(users));
     describe('성공시', () => {
-        const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
-        before(() =>  models.sequelize.sync({force : true}));
-        before(() =>  models.User.bulkCreate(users));
 
         it('유저 객체를 담은 배열로 응답한다.', (done)=>{
             request(app)
@@ -40,6 +40,9 @@ describe.only('GET /users는 ', () => {
 });
 
 describe('GET /users/:id는 ' , ()=>{
+    const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
+    before(() =>  models.sequelize.sync({force : true}));
+    before(() =>  models.User.bulkCreate(users));
     describe('성공시', ()=>{
         it('id가 1인 유저 객체를 반환한다', (done) => {
             request(app)
@@ -69,6 +72,9 @@ describe('GET /users/:id는 ' , ()=>{
 });
 
 describe('DELETE /users/:id', () =>{
+    const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
+    before(() =>  models.sequelize.sync({force : true}));
+    before(() =>  models.User.bulkCreate(users));
     describe('성공시', () => {
         it('204를 응답한다.', (done) =>{
             request(app)
@@ -90,7 +96,9 @@ describe('DELETE /users/:id', () =>{
 });
 
 describe('POST /users는 ' , () =>{
-    
+    const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
+    before(() =>  models.sequelize.sync({force : true}));
+    before(() =>  models.User.bulkCreate(users));
     let name = 'daniel';
     describe('성공시', () =>{
         let body;
@@ -134,11 +142,14 @@ describe('POST /users는 ' , () =>{
 })
 
 describe('PUT /user/:id', () =>{
+    const users = [ { name : 'alice'}, {name : 'baek'}, {name : 'chris'}];
+    before(() =>  models.sequelize.sync({force : true}));
+    before(() =>  models.User.bulkCreate(users));
     const name = 'chally';
     describe('성공시', () =>{
         it('변경된 name을 응답한다.', (done) => {
             request(app)
-                .put('/users/3')
+                .put('/users/2')
                 .send({name})
                 .end((err, res) => {
                     res.body.should.have.property('name', name);
@@ -178,9 +189,9 @@ describe('PUT /user/:id', () =>{
     });
 
     describe('실패시', () => {
-        it('없는 유저일 경우 400을 응답한다. ' , (done) => {
+        it('이름이 중복일 경우 409을 응답한다. ' , (done) => {
             request(app)
-                .put('/users/3')
+                .put('/users/2')
                 .send({name})
                 .expect(409)
                 .end(done)

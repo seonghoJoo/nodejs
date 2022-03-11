@@ -7,7 +7,10 @@ const sequelize = new Sequelize({
 });
 
 const User = sequelize.define('User', {
-    name : Sequelize.STRING //varchar 255
+    name : {
+        type : Sequelize.STRING, //varchar 255
+        unique : true
+    }
 });
 
 module.exports = {
